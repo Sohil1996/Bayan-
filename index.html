@@ -5257,19 +5257,21 @@ html[dir=rtl] .l3-pad{left:auto;right:max(20px,env(safe-area-inset-right,0px))}\
 .l3-card p{margin:0 0 16px;font:400 14.5px/1.55 var(--sans,Inter,sans-serif);color:rgba(255,255,255,.88)}\
 .l3-card .row{display:flex;gap:10px;flex-wrap:wrap}\
 .l3-card .row button{height:44px;padding:0 20px;border-radius:999px;font:600 14px var(--sans,Inter,sans-serif);cursor:pointer;display:inline-flex;align-items:center;gap:8px}\
-.l3-card .go{border:0;background:linear-gradient(100deg,#8E78FF,#C9A4B8 55%,#EBC17A);color:#1A1208;box-shadow:0 0 28px rgba(150,120,255,.28),0 0 28px rgba(235,190,115,.25)}\
+.l3-card .go{border:0;background:#E3B65E;color:#1A1208;box-shadow:0 0 24px rgba(235,190,115,.35)}.l3-card .go:hover{background:#EDC472}\
+.l3-dim{position:absolute;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .5s}#l3.held .l3-dim{opacity:1}\
+.l3-card .av{display:none;float:inline-end;width:64px;height:64px;border-radius:50%;object-fit:cover;margin:0 0 6px 12px;border:2px solid rgba(240,201,135,.9);box-shadow:0 0 22px rgba(235,190,115,.5)}.l3-card.chm .av{display:block}\
 .l3-card .bk{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff}\
 .l3-card .bk:hover{background:rgba(255,255,255,.16)}\
 #l3.held .l3-pad,#l3.held .l3-cross,#l3.held .l3-sug,#l3.held .l3-prompt,#l3.held .l3-help{opacity:0!important;pointer-events:none!important}\
 @media (max-width:700px){.l3-card{top:150px;padding:16px 16px 14px}.l3-card p{font-size:13.5px;margin-bottom:12px}}\
 .l3-chars{position:absolute;left:50%;top:max(84px,10.5%);transform:translateX(-50%);display:flex;gap:18px;justify-content:center;flex-wrap:wrap;max-width:min(560px,calc(100vw - 24px));opacity:0;pointer-events:none;transition:opacity .5s}\
 .l3-chars.on{opacity:1;pointer-events:auto}\
-.l3-ch{display:grid;justify-items:center;gap:5px;width:68px;padding:0;border:0;background:none;color:#fff;cursor:pointer;animation:l3cf 5s ease-in-out infinite alternate}\
+.l3-ch{display:grid;justify-items:center;gap:5px;width:68px;padding:0;border:0;background:none;color:#fff;cursor:pointer;animation:l3cf 7s ease-in-out infinite}\
 .l3-ch:nth-child(2n){animation-delay:-2.2s}.l3-ch:nth-child(3n){animation-delay:-3.4s}\
 .l3-ch img{width:48px;height:48px;border-radius:50%;object-fit:cover;border:1.5px solid rgba(240,201,135,.85);box-shadow:0 0 20px rgba(235,190,115,.5);background:rgba(20,16,24,.6);transition:transform .25s}\
 .l3-ch:hover img,.l3-ch:focus-visible img{transform:scale(1.18)}\
 .l3-ch span{font:500 11px var(--sans,Inter,sans-serif);text-shadow:0 1px 8px rgba(0,0,0,.9);max-width:74px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}\
-@keyframes l3cf{from{transform:translateY(-4px)}to{transform:translateY(5px)}}\
+@keyframes l3cf{0%{transform:translate(0,0)}33%{transform:translate(var(--fx,8px),var(--fy,-8px))}66%{transform:translate(calc(var(--fx,8px)*-.8),var(--fy2,7px))}100%{transform:translate(calc(var(--fx,8px)*.5),calc(var(--fy,-8px)*-1))}}\
 .l3-chd{position:absolute;left:50%;top:max(176px,21%);width:min(430px,calc(100vw - 32px));transform:translate(-50%,8px);opacity:0;pointer-events:none;padding:16px 20px;border-radius:22px;border:1px solid rgba(255,255,255,.3);background:linear-gradient(160deg,rgba(255,255,255,.24),rgba(255,255,255,.08)),rgba(18,14,26,.6);backdrop-filter:blur(30px) saturate(1.5);-webkit-backdrop-filter:blur(30px) saturate(1.5);box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 50px rgba(235,190,115,.25);transition:opacity .25s,transform .25s;z-index:3}\
 .l3-chd.on{opacity:1;transform:translate(-50%,0)}\
 .l3-chd b{display:block;font:400 22px var(--display,Lora,serif);color:#fff}\
@@ -5296,7 +5298,7 @@ html[dir=rtl] .l3-pad{left:auto;right:max(20px,env(safe-area-inset-right,0px))}\
 <button type="button" class="l3-prompt" id="l3P"><kbd>E</kbd><span><b></b><small></small></span></button>\
 <div class="l3-help" id="l3H"></div>\
 <div class="l3-pad" id="l3Pad"><button type="button" class="pu" data-d="f" aria-label="Forward"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button><button type="button" class="pl" data-d="tl" aria-label="Turn left"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button><button type="button" class="pd" data-d="b" aria-label="Back"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button><button type="button" class="pr" data-d="tr" aria-label="Turn right"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button></div>\
-<div class="l3-card" id="l3Card"><small></small><h3></h3><em></em><p></p><div class="row"><button type="button" class="go"></button><button type="button" class="bk"></button></div></div>\
+<div class="l3-dim"></div><div class="l3-card" id="l3Card"><img class="av" alt=""><small></small><h3></h3><em></em><p></p><div class="row"><button type="button" class="go"></button><button type="button" class="bk"></button></div></div>\
 <div class="l3-chars" id="l3Ch"></div><div class="l3-chd" id="l3Chd"><b></b><em></em><p></p></div>\
 <div class="l3-load" id="l3L"><i></i><span></span></div>';
  document.body.appendChild(r);
@@ -5326,7 +5328,7 @@ function pointers(){var c=el.cv,down=null;
  function lockUI(){if(!el.root)return;el.root.classList.toggle('locked',locked());if(run&&!touch&&!S.held){el.h.textContent=locked()?L('Mouse looks around · W A S D to walk · click to pick up a book · Esc to free the mouse','الفأرة تحرّك النظر · W A S D للمشي · انقر لالتقاط كتاب · Esc لتحرير الفأرة'):(S.nolock?L('Drag to look · W A S D to walk · click a book','اسحب للنظر · W A S D للمشي · انقر على كتاب'):L('Click anywhere to look around with your mouse','انقر في أي مكان للنظر بالفأرة'));el.h.classList.remove('off');clearTimeout(helpT);helpT=setTimeout(function(){el.h.classList.add('off')},6000)}}
  el.lock=lock;el.locked=locked;
  c.addEventListener('pointerdown',function(e){if(e.target!==c)return;
-  if(e.pointerType==='mouse'&&!S.nolock){if(S.held)return;if(!locked()){lock();return}if(S.hover)act();return}
+  if(e.pointerType==='mouse'&&!S.nolock){if(S.held){showBook();return}if(!locked()){lock();return}if(S.hover)act();return}
   down={x:e.clientX,y:e.clientY,t:performance.now(),lx:e.clientX,ly:e.clientY,moved:0,id:e.pointerId,touch:e.pointerType==='touch'};try{c.setPointerCapture(e.pointerId)}catch(x){}});
  c.addEventListener('pointermove',function(e){
   if(e.pointerType==='mouse'&&!S.nolock){if(S.held||!locked())return;var mx=e.movementX||0,my=e.movementY||0;S.yaw-=mx*.0023;S.pitch=Math.max(-1.2,Math.min(1.2,S.pitch-my*.0023));return}
@@ -5615,11 +5617,14 @@ function pickup(g){if(S.held)return;setHover(null);S.held=g;S.keys={};S.f=0;S.t=
  el.card.querySelector('h3').textContent=b.t;el.card.querySelector('h3').dir='auto';el.card.querySelector('em').textContent=b.a;el.card.querySelector('em').dir='auto';var p=el.card.querySelector('p');p.textContent=b.b||'';p.dir='auto';
  el.card.querySelector('.go').textContent=d.generic?L('Ask Bayan about it','اسأل بيان عنه'):L('Discover this book','اكتشف هذا الكتاب');
  buildChars(d.generic||!env.chars?[]:env.chars(d.k));
- el.root.classList.add('held');clearTimeout(cardT);cardT=setTimeout(function(){if(S.held){el.card.classList.add('on');el.chs.classList.add('on')}},rmq()?0:380)}
-function buildChars(list){el.chs.innerHTML='';hideChd();list.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='l3-ch';b.innerHTML='<img alt=""><span></span>';b.querySelector('img').src=c.img;b.querySelector('span').textContent=c.n;b.querySelector('span').dir='auto';
-  b.addEventListener('mouseenter',function(){showChd(c)});b.addEventListener('focus',function(){showChd(c)});b.addEventListener('mouseleave',hideChd);b.addEventListener('blur',hideChd);b.addEventListener('click',function(e){e.stopPropagation();el.chd.classList.contains('on')&&el.chd.dataset.n===c.n?hideChd():showChd(c)});el.chs.appendChild(b)})}
-function showChd(c){var d=el.chd;d.querySelector('b').textContent=c.n;d.querySelector('b').dir='auto';d.querySelector('em').textContent=c.role||'';d.querySelector('em').dir='auto';d.querySelector('p').textContent=c.bio||'';d.querySelector('p').dir='auto';d.dataset.n=c.n;d.classList.add('on')}
-function hideChd(){if(el.chd){el.chd.classList.remove('on');el.chd.dataset.n=''}}
+ el.root.classList.add('held');clearTimeout(cardT);cardT=setTimeout(function(){if(S.held){snapBook();el.card.classList.add('on');el.chs.classList.add('on')}},rmq()?0:380)}
+function buildChars(list){el.chs.innerHTML='';hideChd();list.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.className='l3-ch';b.innerHTML='<img alt=""><span></span>';b.querySelector('img').src=c.img;b.querySelector('span').textContent=c.n;b.querySelector('span').dir='auto';b.style.setProperty('--fx',(6+Math.random()*10)*(Math.random()<.5?-1:1)+'px');b.style.setProperty('--fy',(6+Math.random()*10)*(Math.random()<.5?-1:1)+'px');b.style.setProperty('--fy2',(4+Math.random()*8)+'px');b.style.animationDelay=(-Math.random()*7)+'s';b.style.marginTop=(i%2?18:0)+(Math.random()*14)+'px';
+  b.addEventListener('mouseenter',function(){showChd(c)});b.addEventListener('focus',function(){showChd(c)});b.addEventListener('click',function(e){e.stopPropagation();showChd(c)});el.chs.appendChild(b)})}
+var bookSnap=null;
+function snapBook(){var k=el.card;bookSnap={s:k.querySelector('small').textContent,h:k.querySelector('h3').textContent,e:k.querySelector('em').textContent,p:k.querySelector('p').textContent}}
+function showBook(){if(!bookSnap||!el.card.classList.contains('chm'))return;var k=el.card;k.classList.remove('chm');k.querySelector('small').textContent=bookSnap.s;k.querySelector('h3').textContent=bookSnap.h;k.querySelector('em').textContent=bookSnap.e;k.querySelector('p').textContent=bookSnap.p}
+function showChd(c){var k=el.card;if(!bookSnap)snapBook();k.querySelector('.av').src=c.img;k.querySelector('small').textContent=L('Character','الشخصية');k.querySelector('h3').textContent=c.n;k.querySelector('h3').dir='auto';k.querySelector('em').textContent=c.role||'';k.querySelector('em').dir='auto';var p=k.querySelector('p');p.textContent=c.bio||'';p.dir='auto';k.classList.add('chm')}
+function hideChd(){if(el.card){el.card.classList.remove('chm')}bookSnap=null}
 var cardT=0;
 function putBack(){if(!S.held)return;S.held=null;clearTimeout(cardT);el.card.classList.remove('on');el.chs.classList.remove('on');hideChd();try{el.lock&&el.lock()}catch(e){}el.root.classList.remove('held');if(!touch&&!S.nolock){el.h.textContent=L('Click to look around again','انقر للنظر من جديد');el.h.classList.remove('off');clearTimeout(helpT);helpT=setTimeout(function(){el.h.classList.add('off')},3500)}}
 function discover(){if(!S.held)return;var d=S.held.userData;if(d.generic){var t=d.title,a=d.author;go(function(){env.ask(L('Tell me about “'+t+'” by '+a,'حدّثني عن «'+t+'» لـ '+a))})}else{var k=d.k;go(function(){env.open(k)})}}
@@ -5647,7 +5652,7 @@ function audStart(){try{var A=window.AudioContext||window.webkitAudioContext;if(
 }
   if(aud.c.state==='suspended')aud.c.resume();audSet()}catch(e){}}
 function footfall(){}
-function audSet(){if(!aud)return;var t=aud.c.currentTime;aud.m.gain.cancelScheduledValues(t);aud.m.gain.linearRampToValueAtTime(S.sound&&run?.022:0,t+2)}
+function audSet(){if(!aud)return;var t=aud.c.currentTime;aud.m.gain.cancelScheduledValues(t);aud.m.gain.linearRampToValueAtTime(S.sound&&run?.0022:0,t+2)}
 function audStop(){if(!aud)return;var t=aud.c.currentTime;aud.m.gain.cancelScheduledValues(t);aud.m.gain.linearRampToValueAtTime(0,t+.5);setTimeout(function(){if(!run&&aud)aud.c.suspend()},700)}
 /* ---------- open / close ---------- */
 function loadThree(cb,err){if(window.THREE){T=window.THREE;return cb()}if(loading)return;loading=true;var s=document.createElement('script');s.src=SRC;s.onload=function(){T=window.THREE;loading=false;cb()};s.onerror=function(){loading=false;err()};document.head.appendChild(s)}
