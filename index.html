@@ -5258,7 +5258,7 @@ html[dir=rtl] .l3-pad{left:auto;right:max(20px,env(safe-area-inset-right,0px))}\
 .l3-card .row{display:flex;gap:10px;flex-wrap:wrap}\
 .l3-card .row button{height:44px;padding:0 20px;border-radius:999px;font:600 14px var(--sans,Inter,sans-serif);cursor:pointer;display:inline-flex;align-items:center;gap:8px}\
 .l3-card .go{border:0;background:#E3B65E;color:#1A1208;box-shadow:0 0 24px rgba(235,190,115,.35)}.l3-card .go:hover{background:#EDC472}\
-.l3-dim{position:absolute;inset:0;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .5s}#l3.held .l3-dim{opacity:1}\
+.l3-dim{display:none}\
 .l3-card .av{display:none;float:inline-end;width:64px;height:64px;border-radius:50%;object-fit:cover;margin:0 0 6px 12px;border:2px solid rgba(240,201,135,.9);box-shadow:0 0 22px rgba(235,190,115,.5)}.l3-card.chm .av{display:block}\
 .l3-card .bk{border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#fff}\
 .l3-card .bk:hover{background:rgba(255,255,255,.16)}\
@@ -5316,8 +5316,8 @@ html[dir=rtl] .l3-pad{left:auto;right:max(20px,env(safe-area-inset-right,0px))}\
  pointers();
  txt()}
 function txt(){if(!el.root)return;el.root.querySelector('#l3Back span').textContent=L('Back','رجوع');var t=el.root.querySelector('.l3-ttl');t.firstElementChild.textContent=L('Bayan','بيان');t.lastElementChild.textContent=L('The Reading Hall','قاعة القراءة');el.load.querySelector('span').textContent=L('Lighting the candles…','نُشعل الشموع…');el.root.dir=AR()?'rtl':'ltr';if(el.card){el.card.querySelector('small').textContent=L('In your hands','بين يديك');el.card.querySelector('.go').textContent=L('Discover this book','اكتشف هذا الكتاب');el.card.querySelector('.bk').textContent=L('Put it back','أعده إلى الرف')}sugUI();sndUI()}
-function sugList(){return AR()?['اقترح عليّ كتابًا هادئًا','رواية كلاسيكية قصيرة','روايات عربية قد تعجبني','فاجئني']:['Recommend something cozy','A short classic for tonight','Arabic novels I might love','Surprise me']}
-function sugUI(){var l=sugList();el.sug.innerHTML='';l.forEach(function(t){var b=document.createElement('button');b.type='button';b.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1l1.5 9.5L23 12l-9.5 1.5L12 23l-1.5-9.5L1 12l9.5-1.5z"/></svg><span></span>';b.lastChild.textContent=t;b.addEventListener('click',function(e){e.stopPropagation();go(function(){env.ask(t)})});el.sug.appendChild(b)})}
+function sugList(){return AR()?[['جد لي كتابًا دراميًا','macbeth'],['أريد مأساة عن الغيرة','othello'],['ملحمة بحرية عظيمة','odyssey'],['رواية عربية خالدة','gebelawi']]:[['Find me a drama book','macbeth'],['A tragedy of jealousy','othello'],['An epic sea voyage','odyssey'],['A timeless Arabic novel','gebelawi']]}
+function sugUI(){var l=sugList();el.sug.innerHTML='';l.forEach(function(t){var b=document.createElement('button');b.type='button';b.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1l1.5 9.5L23 12l-9.5 1.5L12 23l-1.5-9.5L1 12l9.5-1.5z"/></svg><span></span>';b.lastChild.textContent=t[0];b.addEventListener('click',function(e){e.stopPropagation();var g=anim.held.filter(function(x){return x.userData.k===t[1]})[0];if(g&&!S.held&&!S.auto)walkTo(g);else go(function(){env.ask(t[0])})});el.sug.appendChild(b)})}
 function sndUI(){el.snd.innerHTML=S.sound?'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>':'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';el.snd.setAttribute('aria-label',S.sound?'Mute':'Unmute')}
 /* ---------- input ---------- */
 function pointers(){var c=el.cv,down=null;
@@ -5553,21 +5553,32 @@ function buildMagic(){
 }
 /* ---------- loop ---------- */
 function resize(){if(!R)return;var w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.fov=w<h?82:72;cam.updateProjectionMatrix()}
+function walkTo(g){var d=g.userData,hm=d.home,px=hm.x*.5,lane=(hm.x<0?-1:1)*1.5,dy=hm.y-1.66,dx=hm.x-px;
+ S.auto={w:[[lane,S.z],[lane,hm.z],[px,hm.z]],i:0,yaw:Math.atan2(-dx,.0001),pitch:Math.atan2(dy,Math.abs(dx)),g:g,t:0};S.keys={};if(el.h)el.h.textContent=L('Walking you to the book…','نمشي بك إلى الكتاب…');try{if(document.pointerLockElement)document.exitPointerLock()}catch(e){}}
+function angD(a,b){var d=(b-a)%(Math.PI*2);if(d>Math.PI)d-=Math.PI*2;if(d<-Math.PI)d+=Math.PI*2;return d}
+function autoStep(dt){var A=S.auto;if(S.held){S.auto=null;return}for(var kk in S.keys){if(S.keys[kk]){S.auto=null;return}}
+ A.t+=dt;var w=A.w[A.i];if(!w){var ok=Math.abs(angD(S.yaw,A.yaw))<.04&&Math.abs(S.pitch-A.pitch)<.04;S.yaw+=angD(S.yaw,A.yaw)*Math.min(1,dt*5);S.pitch+=(A.pitch-S.pitch)*Math.min(1,dt*5);S.atx=S.atz=0;if(ok||A.t>14){var g=A.g;S.auto=null;S.hover=null;pickup(g)}return}
+ var dx=w[0]-S.x,dz=w[1]-S.z,dist=Math.sqrt(dx*dx+dz*dz);if(dist<.12){A.i++;S.atx=S.atz=0;return}
+ var want=Math.atan2(-dx,-dz),sp=Math.min(3.1,.6+dist*1.8);S.yaw+=angD(S.yaw,want)*Math.min(1,dt*4);S.pitch+=(-.03-S.pitch)*Math.min(1,dt*3);
+ var al=Math.max(0,1-Math.abs(angD(S.yaw,want))*1.2);S.atx=dx/dist*sp*al;S.atz=dz/dist*sp*al}
 function hitObs(x,z){var r=.34;if(x<-7.15||x>7.15||z<-16.4||z>16.9)return true;for(var i=0;i<obs.length;i++){var o=obs[i];if(o.c){var dx=x-o.x,dz=z-o.z;if(dx*dx+dz*dz<(o.r+r)*(o.r+r))return true}else if(x>o.x0-r&&x<o.x1+r&&z>o.z0-r&&z<o.z1+r)return true}return false}
 function step(dt){
  var k=S.keys,f=(k.w||k.ArrowUp?1:0)-(k.s||k.ArrowDown?1:0)+S.f,sd=(k.d?1:0)-(k.a?1:0),tn=(k.ArrowLeft?1:0)-(k.ArrowRight?1:0)-S.t;
  if(S.held){f=0;sd=0;tn=0}S.yaw+=tn*1.8*dt;f=Math.max(-1,Math.min(1,f));
  var sp=(k.Shift?5.2:2.9),mx=0,mz=0;
- if(f||sd){var fx=-Math.sin(S.yaw),fz=-Math.cos(S.yaw),rx=Math.cos(S.yaw),rz=-Math.sin(S.yaw);mx=(fx*f+rx*sd)*sp*dt;mz=(fz*f+rz*sd)*sp*dt;
-  if(!hitObs(S.x+mx,S.z))S.x+=mx;if(!hitObs(S.x,S.z+mz))S.z+=mz;var ph0=Math.floor(S.bob/Math.PI);S.bob+=dt*(k.Shift?11:7.5);if(Math.floor(S.bob/Math.PI)!==ph0)footfall()}
- S.moved=(f||sd)?1:0;
- cam.position.set(S.x,1.66+(S.moved?Math.sin(S.bob)*.028:0)+Math.sin(performance.now()*.0007)*.006,S.z);cam.rotation.set(S.pitch,S.yaw,Math.sin(S.bob*.5)*(S.moved?.0028:0))
+ if(S.auto)autoStep(dt);
+ var fx=-Math.sin(S.yaw),fz=-Math.cos(S.yaw),rx=Math.cos(S.yaw),rz=-Math.sin(S.yaw);
+ var tvx=S.auto?S.atx:(fx*f+rx*sd)*sp,tvz=S.auto?S.atz:(fz*f+rz*sd)*sp,ac=Math.min(1,dt*(f||sd?7:9));S.vx=(S.vx||0)+(tvx-(S.vx||0))*ac;S.vz=(S.vz||0)+(tvz-(S.vz||0))*ac;
+ var spd=Math.sqrt(S.vx*S.vx+S.vz*S.vz);if(spd<.01){S.vx=0;S.vz=0;spd=0}
+ if(spd){mx=S.vx*dt;mz=S.vz*dt;if(!hitObs(S.x+mx,S.z))S.x+=mx;else S.vx=0;if(!hitObs(S.x,S.z+mz))S.z+=mz;else S.vz=0;var ph0=Math.floor(S.bob/Math.PI);S.bob+=dt*(1.6+spd*1.9);if(Math.floor(S.bob/Math.PI)!==ph0)footfall()}
+ S.moved=spd?1:0;S.ba=(S.ba||0)+(Math.min(1,spd/2.9)-(S.ba||0))*Math.min(1,dt*6);
+ cam.position.set(S.x,1.66+Math.sin(S.bob)*.026*S.ba+Math.sin(performance.now()*.0007)*.006,S.z);cam.rotation.set(S.pitch,S.yaw,Math.sin(S.bob*.5)*.0028*S.ba)
 }
 var _v=null;
 function hands(t,dt){if(!_v){_v={p:new T.Vector3(),q:new T.Quaternion(),e:new T.Euler(),tq:new T.Quaternion(),f:new T.Vector3(),u:new T.Vector3(),r:new T.Vector3()}}
  var s=t*.001;anim.held.forEach(function(g){var d=g.userData;if(d.generic&&!g.visible)return;
   var hv=(S.hover&&S.hover.g===g&&!S.held)?1:0;d.hv+=(hv-d.hv)*Math.min(1,dt*9);if(Math.abs(hv-d.hv)<.003)d.hv=hv;
-  var tg=(S.held===g)?1:0;d.h+=(tg-d.h)*Math.min(1,dt*5);if(Math.abs(tg-d.h)<.003)d.h=tg;
+  var tg=(S.held===g)?1:0;d.h+=(tg-d.h)*Math.min(1,dt*5);if(Math.abs(tg-d.h)<.003)d.h=tg;var LY=d.h>0?1:0;if(d.lay!==LY){d.lay=LY;g.traverse(function(o){o.layers.set(LY)})}
   d.glow.material.opacity=Math.max(0,((.2+Math.sin(s*1.6+d.ph)*.14)*(1-d.hv)+d.hv*.85)*(1-d.h));
   d.cover.emissiveIntensity=.14+d.hv*.28+d.h*.3;d.spine.emissiveIntensity=.12+d.hv*.4;
   if(d.h<=0){if(d.generic&&S.held!==g){genRestore();return}g.position.copy(d.home);if(d.hv>0)g.position.addScaledVector(d.out,.085*d.hv);g.quaternion.copy(d.homeQ);g.scale.setScalar(1+.08*d.hv);return}
@@ -5589,7 +5600,14 @@ function animate(t,dt){
  var st=anim.star;st.g.position.y=2.35+Math.sin(s*1.1)*.12;st.g.rotation.y=Math.sin(s*.6)*.5;st.l.intensity=2.6+Math.sin(s*2.2)*.5;var pu=1+Math.sin(s*2.2)*.06;st.s.scale.set(4.2*pu,4.2*pu,1);
  anim.glows.forEach(function(g,i){if(g.isSprite)g.material.opacity=Math.min(1,g.material.opacity*0+(g.userData.o||(g.userData.o=g.material.opacity))*(.93+Math.sin(s*1.3+i)*.07))});
 }
-function loop(now){if(!run)return;raf=requestAnimationFrame(loop);var dt=Math.min(.05,clk.getDelta());step(dt);animate(now,dt);if(!S.held)pick(.5,.5);R.render(scene,cam)}
+var dimS=null,dimC=null,dimM=null,dimV=0,hl=null,lt=0,fc=0,sdt=.016;
+function renderAll(dt){var tg=S.held?1:0;dimV+=(tg-dimV)*Math.min(1,dt*6);if(Math.abs(tg-dimV)<.004)dimV=tg;
+ if(dimV<=0){R.autoClear=true;cam.layers.set(0);R.render(scene,cam);return}
+ if(!dimS){dimS=new T.Scene();dimC=new T.OrthographicCamera(-1,1,1,-1,0,1);dimM=new T.MeshBasicMaterial({color:0,transparent:true,opacity:0,depthTest:false,depthWrite:false});dimS.add(new T.Mesh(new T.PlaneGeometry(2,2),dimM));hl=new T.PointLight(0xfff1dc,0,5,1.4);hl.layers.set(1);scene.add(hl)}
+ scene.traverse(function(o){if(o.isLight&&o!==hl)o.layers.enable(1)});
+ _v.f.set(0,0,-1).applyQuaternion(cam.quaternion);hl.position.copy(cam.position).addScaledVector(_v.f,.15);hl.intensity=2.4*dimV;dimM.opacity=.5*dimV;
+ R.autoClear=false;R.clear();cam.layers.set(0);R.render(scene,cam);R.render(dimS,dimC);R.clearDepth();var bg=scene.background,fg=scene.fog;scene.background=null;scene.fog=null;cam.layers.set(1);R.render(scene,cam);scene.background=bg;scene.fog=fg;cam.layers.set(0);R.autoClear=true}
+function loop(now){if(!run)return;raf=requestAnimationFrame(loop);var raw=clk.getDelta();sdt+=(Math.min(.05,raw)-sdt)*.25;var dt=sdt;step(dt);animate(now,dt);fc++;if(!S.held&&(fc&1))pick(.5,.5);renderAll(dt)}
 function startLoop(){if(raf)cancelAnimationFrame(raf);clk.getDelta();raf=requestAnimationFrame(loop)}
 function stopLoop(){cancelAnimationFrame(raf);raf=0}
 /* ---------- picking ---------- */
@@ -5616,10 +5634,11 @@ function pickup(g){if(S.held)return;setHover(null);S.held=g;S.keys={};S.f=0;S.t=
  var d=g.userData,b=d.generic?{t:d.title,a:d.author,b:L('A classic from Bayan’s shelves. Ask Bayan about its story, its themes, and who it suits.','كتاب من رفوف بيان. اسأل بيان عن حكايته وموضوعاته ولمن يناسب.')}:env.info(d.k);
  el.card.querySelector('h3').textContent=b.t;el.card.querySelector('h3').dir='auto';el.card.querySelector('em').textContent=b.a;el.card.querySelector('em').dir='auto';var p=el.card.querySelector('p');p.textContent=b.b||'';p.dir='auto';
  el.card.querySelector('.go').textContent=d.generic?L('Ask Bayan about it','اسأل بيان عنه'):L('Discover this book','اكتشف هذا الكتاب');
- buildChars(d.generic||!env.chars?[]:env.chars(d.k));
+ buildChars(padChars(d.generic||!env.chars?[]:env.chars(d.k)));
  el.root.classList.add('held');clearTimeout(cardT);cardT=setTimeout(function(){if(S.held){snapBook();el.card.classList.add('on');el.chs.classList.add('on')}},rmq()?0:380)}
 function buildChars(list){el.chs.innerHTML='';hideChd();list.forEach(function(c,i){var b=document.createElement('button');b.type='button';b.className='l3-ch';b.innerHTML='<img alt=""><span></span>';b.querySelector('img').src=c.img;b.querySelector('span').textContent=c.n;b.querySelector('span').dir='auto';b.style.setProperty('--fx',(6+Math.random()*10)*(Math.random()<.5?-1:1)+'px');b.style.setProperty('--fy',(6+Math.random()*10)*(Math.random()<.5?-1:1)+'px');b.style.setProperty('--fy2',(4+Math.random()*8)+'px');b.style.animationDelay=(-Math.random()*7)+'s';b.style.marginTop=(i%2?18:0)+(Math.random()*14)+'px';
   b.addEventListener('mouseenter',function(){showChd(c)});b.addEventListener('focus',function(){showChd(c)});b.addEventListener('click',function(e){e.stopPropagation();showChd(c)});el.chs.appendChild(b)})}
+function padChars(l){l=(l||[]).slice();if(l.length<5&&env.demo){var more=env.demo(5-l.length);l=l.concat(more)}return l}
 var bookSnap=null;
 function snapBook(){var k=el.card;bookSnap={s:k.querySelector('small').textContent,h:k.querySelector('h3').textContent,e:k.querySelector('em').textContent,p:k.querySelector('p').textContent}}
 function showBook(){if(!bookSnap||!el.card.classList.contains('chm'))return;var k=el.card;k.classList.remove('chm');k.querySelector('small').textContent=bookSnap.s;k.querySelector('h3').textContent=bookSnap.h;k.querySelector('em').textContent=bookSnap.e;k.querySelector('p').textContent=bookSnap.p}
@@ -5660,13 +5679,14 @@ function open(){ui();txt();if(run)return;
  document.body.classList.add('lib3d-open');el.root.hidden=false;el.load.classList.remove('off');el.load.querySelector('span').textContent=L('Lighting the candles…','نُشعل الشموع…');void el.root.offsetWidth;el.root.classList.add('go');
  try{if(window.bayanDockHide)bayanDockHide()}catch(e){}
  audStart();touch=matchMedia('(pointer:coarse)').matches;try{if(el.lock&&!touch)el.lock()}catch(e){}
- loadThree(function(){setTimeout(function(){try{if(!ready){clk=new T.Clock();build()}else resize();S.x=0;S.z=15.2;S.yaw=0;S.pitch=-.02;S.keys={};S.f=0;S.t=0;run=true;startLoop();audSet();el.load.classList.add('off');
+ loadThree(function(){setTimeout(function(){try{if(!ready){clk=new T.Clock();build()}else resize();S.x=0;S.z=15.2;S.auto=null;S.vx=S.vz=0;S.yaw=0;S.pitch=-.02;S.keys={};S.f=0;S.t=0;run=true;startLoop();audSet();el.load.classList.add('off');
    el.h.textContent=touch?L('Drag to look · use the arrows to walk · tap a book','اسحب للنظر · استخدم الأسهم للمشي · المس كتابًا'):L('Click anywhere to look around with your mouse · W A S D to walk','انقر في أي مكان للنظر بالفأرة · W A S D للمشي');el.h.classList.remove('off');clearTimeout(helpT);helpT=setTimeout(function(){el.h.classList.add('off')},7000)}catch(e){el.load.querySelector('span').textContent=L('3D is not available on this device','المشهد ثلاثي الأبعاد غير متاح على هذا الجهاز');console.error(e)}},60)},function(){el.load.querySelector('span').textContent=L('Could not load the 3D library. Check your connection.','تعذّر تحميل المشهد. تحقق من الاتصال.')})}
-function close(quick){if(!el.root||el.root.hidden)return;run=false;stopLoop();audStop();S.held=null;genRestore();if(el.card){el.card.classList.remove('on');el.chs.classList.remove('on');hideChd()}el.root.classList.remove('held','locked');try{if(document.pointerLockElement)document.exitPointerLock()}catch(e){}S.keys={};S.f=0;S.t=0;setHover(null);anim.held.forEach(function(g){g.userData.h=0;g.userData.hv=0;g.userData.target=0});clearTimeout(helpT);el.root.classList.remove('go');document.body.classList.remove('lib3d-open');setTimeout(function(){if(!run)el.root.hidden=true},rmq()?0:620)}
+function close(quick){if(!el.root||el.root.hidden)return;run=false;S.auto=null;dimV=0;stopLoop();audStop();S.held=null;genRestore();if(el.card){el.card.classList.remove('on');el.chs.classList.remove('on');hideChd()}el.root.classList.remove('held','locked');try{if(document.pointerLockElement)document.exitPointerLock()}catch(e){}S.keys={};S.f=0;S.t=0;setHover(null);anim.held.forEach(function(g){g.userData.h=0;g.userData.hv=0;g.userData.target=0});clearTimeout(helpT);el.root.classList.remove('go');document.body.classList.remove('lib3d-open');setTimeout(function(){if(!run)el.root.hidden=true},rmq()?0:620)}
 ui();
 return {open:open,close:close,debug:function(x,z,yaw,pitch){S.x=x;S.z=z;S.yaw=yaw;S.pitch=pitch||0},isOpen:function(){return run},fills:function(a,b){return fil.pos.slice(a*3,b*3)},heldInfo:function(){return anim.held.filter(function(g){return g.userData.target}).map(function(g){return[g.userData.h,g.position.x,g.position.y,g.position.z,g.scale.x]})},books:function(){return anim.held.map(function(g){return{k:g.userData.k,x:g.userData.home.x,y:g.userData.home.y,z:g.userData.home.z}})},state:S}
 };
-(function(){var L3=makeLib3D({threeSrc:'https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js',ar:function(){return document.documentElement.dir==='rtl'},covers:Object.keys(CAT).filter(function(k){return /^[a-z]+$/.test(k)}),cover:function(k){return 'img/b-'+k+'.jpg'},info:function(k){return {t:CAT[k].t,a:CAT[k].a,b:CAT[k].b}},chars:function(k){return (CHR[k]||[]).map(function(c){return {n:c[0],role:c[1],bio:c[2],img:c[3]?'img/'+c[3]+'.jpg':mono(c[0])}})},open:function(k){selectBook(k);if(window.openBookChat)window.openBookChat(k)},ask:function(t){openBayan();setTimeout(function(){if(typeof cvSend==='function')cvSend(t)},rm?300:1700)},talk:function(){document.getElementById('dcb').click()}});window.bayan3D=L3})();
+(function(){var L3=makeLib3D({threeSrc:'https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js',ar:function(){return document.documentElement.dir==='rtl'},covers:Object.keys(CAT).filter(function(k){return /^[a-z]+$/.test(k)}),cover:function(k){return 'img/b-'+k+'.jpg'},info:function(k){return {t:CAT[k].t,a:CAT[k].a,b:CAT[k].b}},demo:function(n){var pool=[];Object.keys(CHR).forEach(function(k){CHR[k].forEach(function(c){if(c[3])pool.push(c[3])})});var ar=document.documentElement.dir==='rtl',nm=ar?[['البطل','محور الحكاية','شخصية تجريبية: قلب الحكاية، وكل قراراته تحرّك الأحداث.'],['المرشد','الحكيم','شخصية تجريبية: تدلّ البطل حين يضلّ الطريق.'],['الخصم','العقبة','شخصية تجريبية: تقف في وجه الأحلام وتختبر الشجاعة.'],['الصديق','الرفيق','شخصية تجريبية: يبقى قريبًا في الأيام الصعبة.'],['الغريب','سرّ الحكاية','شخصية تجريبية: يظهر فجأة ويقلب كل شيء.']]:[['The Protagonist','Heart of the story','A demo character: the heart of the tale, whose choices drive everything.'],['The Mentor','The guide','A demo character: shows the way when the hero is lost.'],['The Rival','The obstacle','A demo character: stands against the dream and tests courage.'],['The Confidant','Loyal friend','A demo character: stays close through the hard days.'],['The Stranger','Keeper of secrets','A demo character: arrives unannounced and changes everything.']];var o=[],off=Math.floor(Math.random()*pool.length);for(var i=0;i<n&&i<nm.length;i++)o.push({n:nm[i][0],role:nm[i][1],bio:nm[i][2],img:'img/'+pool[(off+i*3)%pool.length]+'.jpg'});return o},
+chars:function(k){return (CHR[k]||[]).map(function(c){return {n:c[0],role:c[1],bio:c[2],img:c[3]?'img/'+c[3]+'.jpg':mono(c[0])}})},open:function(k){selectBook(k);if(window.openBookChat)window.openBookChat(k)},ask:function(t){openBayan();setTimeout(function(){if(typeof cvSend==='function')cvSend(t)},rm?300:1700)},talk:function(){document.getElementById('dcb').click()}});window.bayan3D=L3})();
 })();
 </script>
 </body></html>
