@@ -5316,7 +5316,7 @@ html[dir=rtl] .l3-pad{left:auto;right:max(20px,env(safe-area-inset-right,0px))}\
  pointers();
  txt()}
 function txt(){if(!el.root)return;el.root.querySelector('#l3Back span').textContent=L('Back','رجوع');var t=el.root.querySelector('.l3-ttl');t.firstElementChild.textContent=L('Bayan','بيان');t.lastElementChild.textContent=L('The Reading Hall','قاعة القراءة');el.load.querySelector('span').textContent=L('Lighting the candles…','نُشعل الشموع…');el.root.dir=AR()?'rtl':'ltr';if(el.card){el.card.querySelector('small').textContent=L('In your hands','بين يديك');el.card.querySelector('.go').textContent=L('Discover this book','اكتشف هذا الكتاب');el.card.querySelector('.bk').textContent=L('Put it back','أعده إلى الرف')}sugUI();sndUI()}
-function sugList(){return AR()?[['جد لي كتابًا دراميًا','macbeth'],['أريد مأساة عن الغيرة','othello'],['ملحمة بحرية عظيمة','odyssey'],['رواية عربية خالدة','gebelawi']]:[['Find me a drama book','macbeth'],['A tragedy of jealousy','othello'],['An epic sea voyage','odyssey'],['A timeless Arabic novel','gebelawi']]}
+function sugList(){return AR()?[['جد لي كتابًا دراميًا','macbeth'],['أريد مأساة عن الغيرة','othello'],['ملحمة تاريخية كبرى','war'],['رواية عربية خالدة','gebelawi']]:[['Find me a drama book','macbeth'],['A tragedy of jealousy','othello'],['A sweeping historical epic','war'],['A timeless Arabic novel','gebelawi']]}
 function sugUI(){var l=sugList();el.sug.innerHTML='';l.forEach(function(t){var b=document.createElement('button');b.type='button';b.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1l1.5 9.5L23 12l-9.5 1.5L12 23l-1.5-9.5L1 12l9.5-1.5z"/></svg><span></span>';b.lastChild.textContent=t[0];b.addEventListener('click',function(e){e.stopPropagation();var g=anim.held.filter(function(x){return x.userData.k===t[1]})[0];if(g&&!S.held&&!S.auto)walkTo(g);else go(function(){env.ask(t[0])})});el.sug.appendChild(b)})}
 function sndUI(){el.snd.innerHTML=S.sound?'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>':'<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';el.snd.setAttribute('aria-label',S.sound?'Mute':'Unmute')}
 /* ---------- input ---------- */
@@ -5553,12 +5553,26 @@ function buildMagic(){
 }
 /* ---------- loop ---------- */
 function resize(){if(!R)return;var w=innerWidth,h=innerHeight;R.setSize(w,h,false);cam.aspect=w/h;cam.fov=w<h?82:72;cam.updateProjectionMatrix()}
-function walkTo(g){var d=g.userData,hm=d.home,px=hm.x*.5,lane=(hm.x<0?-1:1)*1.5,dy=hm.y-1.66,dx=hm.x-px;
- S.auto={w:[[lane,S.z],[lane,hm.z],[px,hm.z]],i:0,yaw:Math.atan2(-dx,.0001),pitch:Math.atan2(dy,Math.abs(dx)),g:g,t:0};S.keys={};if(el.h)el.h.textContent=L('Walking you to the book…','نمشي بك إلى الكتاب…');try{if(document.pointerLockElement)document.exitPointerLock()}catch(e){}}
+function findPath(sx,sz,tx,tz){var C=.2,X0=-7,Z0=-16.3,W=Math.round(14/C)+1,H=Math.round(33.1/C)+1;
+ function cx(x){return Math.max(0,Math.min(W-1,Math.round((x-X0)/C)))}function cz(z){return Math.max(0,Math.min(H-1,Math.round((z-Z0)/C)))}
+ function free(a,b){return !hitObs(X0+a*C,Z0+b*C)}
+ function near(a,b){if(free(a,b))return[a,b];for(var r=1;r<12;r++)for(var da=-r;da<=r;da++)for(var db=-r;db<=r;db++){if(Math.max(Math.abs(da),Math.abs(db))!==r)continue;var A=a+da,B=b+db;if(A>=0&&B>=0&&A<W&&B<H&&free(A,B))return[A,B]}return[a,b]}
+ var s=near(cx(sx),cz(sz)),g=near(cx(tx),cz(tz)),N=W*H,gs=new Float32Array(N).fill(1e9),par=new Int32Array(N).fill(-1),cl=new Uint8Array(N),open=[],si=s[1]*W+s[0],gi=g[1]*W+g[0];
+ function h(i){var a=i%W,b=(i/W)|0;return Math.hypot(a-g[0],b-g[1])}
+ gs[si]=0;open.push([h(si),si]);var found=false;
+ while(open.length){var bi=0;for(var q=1;q<open.length;q++)if(open[q][0]<open[bi][0])bi=q;var cur=open.splice(bi,1)[0][1];if(cl[cur])continue;cl[cur]=1;if(cur===gi){found=true;break}
+  var a=cur%W,b=(cur/W)|0;for(var da=-1;da<=1;da++)for(var db=-1;db<=1;db++){if(!da&&!db)continue;var A=a+da,B=b+db;if(A<0||B<0||A>=W||B>=H||!free(A,B))continue;if(da&&db&&(!free(a+da,b)||!free(a,b+db)))continue;var ni=B*W+A,ng=gs[cur]+(da&&db?1.414:1);if(ng<gs[ni]){gs[ni]=ng;par[ni]=cur;open.push([ng+h(ni),ni])}}}
+ if(!found)return [[tx,tz]];
+ var pts=[],c=gi;while(c>=0){pts.unshift([X0+(c%W)*C,Z0+((c/W)|0)*C]);c=par[c]}
+ function los(p,q){var d=Math.hypot(q[0]-p[0],q[1]-p[1]),n=Math.ceil(d/.1);for(var k=0;k<=n;k++){if(hitObs(p[0]+(q[0]-p[0])*k/n,p[1]+(q[1]-p[1])*k/n))return false}return true}
+ var out=[],i0=0;while(i0<pts.length-1){var k=pts.length-1;while(k>i0+1&&!los(pts[i0],pts[k]))k--;out.push(pts[k]);i0=k}
+ return out}
+function walkTo(g){var d=g.userData,hm=d.home,sgn=hm.x<0?-1:1,tx=sgn*5.5,tz=Math.max(-16,Math.min(16.5,hm.z)),dx=hm.x-tx,dy=hm.y-1.66,w=findPath(S.x,S.z,tx,tz);
+ S.auto={w:w,i:0,yaw:Math.atan2(-dx,.0001),pitch:Math.atan2(dy,Math.abs(dx)),g:g,t:0};S.keys={};try{if(document.pointerLockElement)document.exitPointerLock()}catch(e){}}
 function angD(a,b){var d=(b-a)%(Math.PI*2);if(d>Math.PI)d-=Math.PI*2;if(d<-Math.PI)d+=Math.PI*2;return d}
 function autoStep(dt){var A=S.auto;if(S.held){S.auto=null;return}for(var kk in S.keys){if(S.keys[kk]){S.auto=null;return}}
- A.t+=dt;var w=A.w[A.i];if(!w){var ok=Math.abs(angD(S.yaw,A.yaw))<.04&&Math.abs(S.pitch-A.pitch)<.04;S.yaw+=angD(S.yaw,A.yaw)*Math.min(1,dt*5);S.pitch+=(A.pitch-S.pitch)*Math.min(1,dt*5);S.atx=S.atz=0;if(ok||A.t>14){var g=A.g;S.auto=null;S.hover=null;pickup(g)}return}
- var dx=w[0]-S.x,dz=w[1]-S.z,dist=Math.sqrt(dx*dx+dz*dz);if(dist<.12){A.i++;S.atx=S.atz=0;return}
+ A.t+=dt;var w=A.w[A.i];if(!w){var ok=Math.abs(angD(S.yaw,A.yaw))<.04&&Math.abs(S.pitch-A.pitch)<.04;S.yaw+=angD(S.yaw,A.yaw)*Math.min(1,dt*5);S.pitch+=(A.pitch-S.pitch)*Math.min(1,dt*5);S.atx=S.atz=0;if(ok||A.t>60){var g=A.g;S.auto=null;S.hover=null;pickup(g)}return}
+ var dx=w[0]-S.x,dz=w[1]-S.z,dist=Math.sqrt(dx*dx+dz*dz);if(dist<(A.i<A.w.length-1?.3:.12)){A.i++;if(A.i>=A.w.length)S.atx=S.atz=0;return}
  var want=Math.atan2(-dx,-dz),sp=Math.min(3.1,.6+dist*1.8);S.yaw+=angD(S.yaw,want)*Math.min(1,dt*4);S.pitch+=(-.03-S.pitch)*Math.min(1,dt*3);
  var al=Math.max(0,1-Math.abs(angD(S.yaw,want))*1.2);S.atx=dx/dist*sp*al;S.atz=dz/dist*sp*al}
 function hitObs(x,z){var r=.34;if(x<-7.15||x>7.15||z<-16.4||z>16.9)return true;for(var i=0;i<obs.length;i++){var o=obs[i];if(o.c){var dx=x-o.x,dz=z-o.z;if(dx*dx+dz*dz<(o.r+r)*(o.r+r))return true}else if(x>o.x0-r&&x<o.x1+r&&z>o.z0-r&&z<o.z1+r)return true}return false}
